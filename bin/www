@@ -8,6 +8,7 @@ const app = require('../app');
 const debug = require('debug')('tienda-colchones-backend:server');
 const http = require('http');
 const config = require('../config');
+const {MongoClient} = require('mongodb');
 
 /**
  * Get port from environment and store in Express.
@@ -15,6 +16,41 @@ const config = require('../config');
 
 const port = normalizePort(process.env.PORT || config.port);
 app.set('port', port);
+
+/**
+ * Initialize mongo collections
+ */
+
+async function initMongoCollections(){
+  const uri = `mongodb+srv://${config.mongoUser}:${config.mongoPass}@${config.mongoClusterURL}/shop?retryWrites=true&w=majority&useUnifiedTopology=true`;
+  const client = new MongoClient(uri);
+
+  try {
+    // Connect to the MongoDB cluster
+    await client.connect();
+
+    // Get all collections of DB
+    const db = client.db(config.mongoDBName);
+    const collections = await db.listCollections({}, {nameOnly: true}).toArray();
+    
+    // Insert data to missing collections
+    for (let name of config.mongoDBCollections) {
+
+      if (collections.filter(collect => collect.name == name).length == 0) {
+        let data = require(`../data/${name}.js`);
+        
+        if (data.length > 0) await db.collection(name).insertMany(data);
+      }
+    }
+
+  } catch (e) {
+    console.error(e);
+  } finally {
+    await client.close();
+  }
+}
+
+initMongoCollections().catch(console.error);
 
 /**
  * Create HTTP server.

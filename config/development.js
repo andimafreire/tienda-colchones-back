@@ -1,3 +1,8 @@
 module.exports = {
-  env: 'development'
+  env: 'development',
+  mongoUser: '--',
+  mongoPass: '--',
+  mongoClusterURL: '--',
+  mongoDBName: 'shop',
+  mongoDBCollections: ['users', 'mattress', 'bases']
 };
