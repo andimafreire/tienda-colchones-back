@@ -4,5 +4,5 @@ module.exports = {
   mongoPass: '--',
   mongoClusterURL: '--',
   mongoDBName: 'shop',
-  mongoDBCollections: ['users', 'mattress', 'bases']
+  mongoDBCollections: ['users', 'products']
 };
