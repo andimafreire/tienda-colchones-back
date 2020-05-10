@@ -54,6 +54,7 @@ function list(req, res, next) {
   /**
    * Edit a product
    * @property {string} req.params.productId - The id of the product
+   * @property {string} req.body.type - The type of the product
    * @property {string} req.body.title - The title of the product
    * @property {string} req.body.description - The description of the product
    * @property {number} req.body.price - The price of the product
@@ -87,5 +88,4 @@ function remove(req, res, next) {
   });
 }
   
-module.exports.list = list;
-module.exports.remove = remove;
+module.exports = { list, remove };

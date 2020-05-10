@@ -1,5 +1,6 @@
 module.exports = {
   env: 'development',
+  jwtSecret: '--',
   mongoUser: '--',
   mongoPass: '--',
   mongoClusterURL: '--',

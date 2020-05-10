@@ -1,5 +1,6 @@
 module.exports = {
   env: 'production',
+  jwtSecret: '--',
   mongoUser: '--',
   mongoPass: '--',
   mongoClusterURL: '--',

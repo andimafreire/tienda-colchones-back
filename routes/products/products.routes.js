@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const productsCtrl = require('./products.controller');
+const authenticator = require('../../helpers/authenticator');
 
 router.route('/')
     .get(/* validate(paramValidation.list), */ productsCtrl.list)
@@ -8,7 +9,7 @@ router.route('/')
 
 router.route('/:productId')
     /* .get(validate(paramValidation.edit), productsCtrl.get)
-    .put(authenticator.ensureWPAuthenticated, validate(paramValidation.edit), productsCtrl.edit) */
-    .delete(/* authenticator.ensureWPAuthenticated, */productsCtrl.remove);
+    .put(authenticator.ensureAuthenticated, validate(paramValidation.edit), productsCtrl.edit) */
+    .delete(authenticator.ensureAuthenticated, productsCtrl.remove);
 
 module.exports = router;
