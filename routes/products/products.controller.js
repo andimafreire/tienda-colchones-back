@@ -39,7 +39,7 @@ function list(req, res, next) {
         else res.json({count, products});
       });
     })
-  );
+  ).catch(e => next(e));;
 }
 
 /**
@@ -47,9 +47,24 @@ function list(req, res, next) {
  * @property {string} req.params.productId - The id of the product
  * @returns {product}
  */
-/* function get(req, res, next) {
-
-} */
+function get(req, res, next) {
+  return getdb.then(db => {
+    var query;
+    try {
+      query = {_id: new mongodb.ObjectID(req.params.productId)};
+    } catch (e) {
+      res.status(400).json({non_field_errors: 'Identificador no válido'});
+      return;
+    }
+    return db.collection("products").findOne({_id: new mongodb.ObjectID(req.params.productId)}, (err, product) => {
+      if (err) {
+        next(e);
+      } else if (product) {
+        res.json(product);
+      } else res.status(404).send();
+    });
+  }).catch(e => next(e));
+}
   
   /**
    * Edit a product
@@ -77,7 +92,7 @@ function remove(req, res, next) {
     try {
       query = {_id: new mongodb.ObjectID(req.params.productId)};
     } catch (e) {
-      res.status(400).json({message: 'Identificador no válido'});
+      res.status(400).json({non_field_errors: 'Identificador no válido'});
       return;
     }
     return db.collection("products").deleteOne(query, (err, obj) => {
@@ -85,7 +100,7 @@ function remove(req, res, next) {
       if (obj.deletedCount == 0) res.status(404).send();
       else res.json({message: "deleted"});
     });
-  });
+  }).catch(e => next(e));;
 }
   
-module.exports = { list, remove };
+module.exports = { list, get, remove };

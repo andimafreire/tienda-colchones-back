@@ -26,7 +26,7 @@ function login(req, res, next) {
                 } 
             } else res.status(400).json({non_field_errors: 'El correo o contraseña introducido no es correcto.'});
         })
-    );
+    ).catch(e => next(e));;
 }
 
 module.exports.login = login;
