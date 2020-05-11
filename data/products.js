@@ -1,42 +1,90 @@
 module.exports = [
     {
-        title: 'Colchón E6230',
-        type: 'colchones',
-        description: 'Excelente colchón de muelles ensacados.',
-        price: '849,95',
-        highlighted: true,
-        picturePath: 'E6230.jpg'
-    },
-    {
-        title: 'Somier S530',
-        type: 'somieres',
-        description: 'Somier de acero con láminas de madera.',
-        price: '149,95',
-        highlighted: true,
-        picturePath: 'S530.jpg'
-    },
-    {
-        title: 'Colchón F304',
-        type: 'colchones',
-        description: 'Gran colchón con núcleo HR.',
-        price: '649,95',
-        highlighted: true,
-        picturePath: 'F304.jpg'
-    },
-    {
-        title: 'Colchón L2304',
-        type: 'colchones',
-        description: 'Cómodo colchon viscoelástico.',
-        price: '749,95',
+        title: "Colchón 1",
+        price: "150.95",
+        type: "colchones",
+        description: "La descripción del colchon 1.",
         highlighted: false,
-        picturePath: 'L2304.jpg'
+        picture: "1589216542173-colchon1.jpg"
     },
     {
-        title: 'Somier S230',
-        type: 'somieres',
-        description: 'Somier firme y resistente.',
-        price: '105,95',
+        title: "Colchón 2",
+        price: "250",
+        type: "colchones",
+        description: "La descripción del colchón 2.",
+        highlighted: true,
+        picture: "1589216598550-colchon2.jpg"
+    },
+    {
+        title: "Somier 1",
+        price: "119.95",
+        type: "somieres",
+        description: "La descripción del somier 1.",
+        highlighted: true,
+        picture: "1589217301369-somier1.jpg"
+    },
+    {
+        title: "Somier 2",
+        price: "85",
+        type: "somieres",
+        description: "La descipción del somier 2.",
+        highlighted: true,
+        picture: "1589217860199-somier2.jpg"
+    },
+    {
+        title: "Colchón 3",
+        price: "359.45",
+        type: "colchones",
+        description: "La descripción del colchón 3.",
         highlighted: false,
-        picturePath: 'S230.jpg'
+        picture: "1589218049327-colchon3.jpg"
+    },
+    {
+        title: "Somier 3",
+        price: "50",
+        type: "somieres",
+        description: "La descripción del somier 3.",
+        highlighted: false,
+        picture: "1589218092811-somier3.jpg"
+    },
+    {
+        title: "Somier 4",
+        price: "138.95",
+        type: "somieres",
+        description: "La descripción del somier 4.",
+        highlighted: true,
+        picture: "1589218127845-somier4.jpg"
+    },
+    {        
+        title: "Colchón 4",
+        price: "495.95",
+        type: "colchones",
+        description: "La descripción del colchón 4.",
+        highlighted: true,
+        picture: "1589218174319-colchon4.jpg"
+    },
+    {        
+        title: "Colchón 5",
+        price: "295.95",
+        type: "colchones",
+        description: "La descripción del colchón5.",
+        highlighted: true,
+        picture: "1589218224265-colchon5.jpg"
+    },
+    {
+        title: "Somier 5",
+        price: "112",
+        type: "somieres",
+        description: "La descripción del somier 5.",
+        highlighted: false,
+        picture: "1589218249456-somier5.jpg"
+    },
+    {
+        title: "Somier 6",
+        price: "495.95",
+        type: "somieres",
+        description: "La descripción del somier 6.",
+        highlighted: true,
+        picture: "1589218276587-somier6.jpg"
     }
 ]

@@ -15,3 +15,5 @@ Start server:
 ```sh
 npm start
 ```
+
+The products and users to insert in mongo in the first run can be found in "data" directory.

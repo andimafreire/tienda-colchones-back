@@ -1,5 +1,7 @@
-const getdb = require('../../helpers/mongodb');
 const mongodb = require('mongodb');
+const path = require('path');
+var fs = require('fs');
+const getdb = require('../../helpers/mongodb');
 
 /**
  * Create new product
@@ -8,12 +10,21 @@ const mongodb = require('mongodb');
  * @property {string} req.body.description - The description of the product
  * @property {number} req.body.price - The price of the product
  * @property {boolean} req.body.highlighted - If the product is highlighted
- * @property {string} req.body.picture - The picture of the product
+ * @property {string} req.file.picture - The picture of the product
  * @returns {{ msg: String }}
  */
-/* function create(req, res, next) {
-    
-  } */
+function create(req, res, next) {
+  const product = req.body;
+  product.highlighted = (product.highlighted === 'true');
+  if (req.file) product.picture = req.file.filename;
+
+  return getdb.then(db =>
+    db.collection("products").insertOne(product, function(err, obj) {
+      if (err) next(err);
+      res.json({message: "ok"});
+    })
+  ).catch(e => next(e));
+}
   
 /**
  * Get products list
@@ -28,8 +39,8 @@ function list(req, res, next) {
   const options = {skip, limit};  // Pagination options
   var query;
 
-  if (req.query.type == 'destacados') query = {highlighted: true};
-  else query = {type: req.query.type};
+  if (req.query.type == 'destacados') query = { highlighted: true };
+  else query = { type: req.query.type };
 
   return getdb.then(db =>
     db.collection("products").find(query).count((err, count) => {
@@ -39,7 +50,7 @@ function list(req, res, next) {
         else res.json({count, products});
       });
     })
-  ).catch(e => next(e));;
+  ).catch(e => next(e));
 }
 
 /**
@@ -49,14 +60,9 @@ function list(req, res, next) {
  */
 function get(req, res, next) {
   return getdb.then(db => {
-    var query;
-    try {
-      query = {_id: new mongodb.ObjectID(req.params.productId)};
-    } catch (e) {
-      res.status(400).json({non_field_errors: 'Identificador no válido'});
-      return;
-    }
-    return db.collection("products").findOne({_id: new mongodb.ObjectID(req.params.productId)}, (err, product) => {
+    const query = {_id: new mongodb.ObjectID(req.params.productId)};
+
+    return db.collection("products").findOne(query, (err, product) => {
       if (err) {
         next(e);
       } else if (product) {
@@ -66,20 +72,42 @@ function get(req, res, next) {
   }).catch(e => next(e));
 }
   
-  /**
-   * Edit a product
-   * @property {string} req.params.productId - The id of the product
-   * @property {string} req.body.type - The type of the product
-   * @property {string} req.body.title - The title of the product
-   * @property {string} req.body.description - The description of the product
-   * @property {number} req.body.price - The price of the product
-   * @property {boolean} req.body.highlighted - If the product is highlighted
-   * @property {string} req.body.picture - The picture of the product
-   * @returns {{ msg: String }}
-   */
- /*  function edit(req, res, next) {
-   
-  } */
+/**
+ * Edit a product
+ * @property {string} req.params.productId - The id of the product
+ * @property {string} req.body.type - The type of the product
+ * @property {string} req.body.title - The title of the product
+ * @property {string} req.body.description - The description of the product
+ * @property {number} req.body.price - The price of the product
+ * @property {boolean} req.body.highlighted - If the product is highlighted
+ * @property {string} req.file.picture - The picture of the product
+ * @returns {{ msg: String }}
+ */
+function edit(req, res, next) {
+  return getdb.then(db => {
+    const query = {_id: new mongodb.ObjectID(req.params.productId)};
+    
+    return db.collection("products").findOne(query, (err, product) => {
+      if (err) {
+        next(e);
+      } else if (product) {
+        if (req.body.picture != product.picture){
+          console.log(path.join(__dirname, '../../public/images', product.picture));
+          fs.unlinkSync(path.join(__dirname, '../../public/images', product.picture)); // Delete old picture.
+        }
+        const newProduct = req.body;
+        newProduct.highlighted = (newProduct.highlighted === 'true');
+        if (req.file) newProduct.picture = req.file.filename;
+        console.log(newProduct);
+        db.collection("products").updateOne(query, { $set: newProduct}, function(err, obj) {
+          console.log(obj)
+          if (err) next(e);
+          else res.json({message: "ok"});
+        })
+      } else res.status(404).send();
+    });
+  }).catch(e => next(e));
+}
   
 /**
  * Delete a product
@@ -87,14 +115,10 @@ function get(req, res, next) {
  * @returns { msg: String }
  */
 function remove(req, res, next) {
+  console.log(req.params.productId)
   return getdb.then(db => {
-    var query;
-    try {
-      query = {_id: new mongodb.ObjectID(req.params.productId)};
-    } catch (e) {
-      res.status(400).json({non_field_errors: 'Identificador no válido'});
-      return;
-    }
+    const query = {_id: new mongodb.ObjectID(req.params.productId)};
+
     return db.collection("products").deleteOne(query, (err, obj) => {
       if (err) next(err);
       if (obj.deletedCount == 0) res.status(404).send();
@@ -103,4 +127,4 @@ function remove(req, res, next) {
   }).catch(e => next(e));;
 }
   
-module.exports = { list, get, remove };
+module.exports = { list, get, create, edit, remove };
