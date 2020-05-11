@@ -92,15 +92,12 @@ function edit(req, res, next) {
         next(e);
       } else if (product) {
         if (req.body.picture != product.picture){
-          console.log(path.join(__dirname, '../../public/images', product.picture));
           fs.unlinkSync(path.join(__dirname, '../../public/images', product.picture)); // Delete old picture.
         }
         const newProduct = req.body;
         newProduct.highlighted = (newProduct.highlighted === 'true');
         if (req.file) newProduct.picture = req.file.filename;
-        console.log(newProduct);
         db.collection("products").updateOne(query, { $set: newProduct}, function(err, obj) {
-          console.log(obj)
           if (err) next(e);
           else res.json({message: "ok"});
         })
@@ -115,7 +112,6 @@ function edit(req, res, next) {
  * @returns { msg: String }
  */
 function remove(req, res, next) {
-  console.log(req.params.productId)
   return getdb.then(db => {
     const query = {_id: new mongodb.ObjectID(req.params.productId)};
 
